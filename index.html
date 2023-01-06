@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Automatic Diet Planner</title>
+    <style>
+      body {
+        font-family: 'Pretendard', sans-serif;
+      }
+     
+      button {
+        padding: 10px 15px;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 16px;
+        background: #63419a;
+        color: #fff;
+        border: 1px solid #222;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+     
+      button:hover {
+        background: #fff;
+        color: #63419a;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Automatic Diet Planner</h1><br>
+    <h4>Enter your information to receive a personalized diet plan:</h4> <br>
+    <form>
+    <label for="openai_key">Enter OpenAI API Key: <a href="https://beta.openai.com/account/api-keys">(Where To Get A Key?)</a></label><br>
+      <input type="text" id="openai_key" name="openai_key"><br>
+ <label for="weight">Weight:</label><br>
+      <input type="text" id="weight" name="weight"><br>
+ <label for="height">Height (In Meters):</label><br>
+      <input type="text" id="height" name="height"><br>
+      <label for="trying">Select Your Goal:</label><br>
+      <select id="trying">
+      	<option value="Lose Weight"> Lose Weight </option>
+        <option value="Stay The Same">Stay The Same</option>
+        <option value="Gain Weight">Gain Weight</option>
+      </select><br>
+      <br>
+      <br>
+      <button type="button" onclick="generateDietPlan()">
+        Generate
+      </button>
+    </form>
+
+    <h6> Diet Plan: </h6>
+    <div id="output"></div>
+	 	
+    <script>
+
+      // Function to generate diet plan from given inputs
+      function generateDietPlan() {
+     
+     
+     
+        // Get inputs from form
+const openai_key = document.getElementById('openai_key').value;
+const weight = document.getElementById('weight').value;
+const height = document.getElementById('height').value;
+const trying = document.getElementById('trying').value;
+       
+        // Create request to OpenAI GPT-3 API
+        const request = new XMLHttpRequest();
+        request.open('POST', 'https://api.openai.com/v1/completions');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('Authorization', `Bearer ${openai_key}`);
+
+        // Handle response from OpenAI GPT-3 API
+        request.onload = () => {
+          const response = JSON.parse(request.responseText);
+          document.getElementById('output').innerHTML = response.choices[0].text;
+        };
+
+
+        // Send request to OpenAI GPT-3 API
+        request.send(
+          JSON.stringify({
+            model: 'text-davinci-003',
+            prompt: `"Please create a full day diet plan for a person with a weight of ${weight} pounds and a height of ${height} meters who is trying to ${trying}. The diet plan should include breakfast, lunch, dinner and maybe two snacks, and each meal should include a variety of nutrients. Please also include the total calorie count at the end of the plan. A Normal amount of calories to eat in a day is 200, trying to gain is 2300 and losing is 1600.
+`,
+            max_tokens: 1024,
+          })
+        );
+      }
+     
+     
+//Function to copy text from output
+function copyText() {
+  const outputText = document.getElementById('output').innerHTML;
+  navigator.clipboard.writeText(outputText);
+}
+ </script>
+ 
+ <button onclick="copyText()">
+   Copy (Paste To See Format)
+ </button>
+  </body>
+</html>
+
