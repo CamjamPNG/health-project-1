@@ -35,6 +35,26 @@
       <input type="text" id="weight" name="weight"><br>
  <label for="height">Height (In Meters):</label><br>
       <input type="text" id="height" name="height"><br>
+      <label for="age">Age:</label><br>
+      <input type="text" id="age" name="age"><br>
+      <label for="allergies">Food Allergies (comma separated):</label><br>
+      <input type="text" id="allergies" name="allergies"><br>
+      <label for="gender">Gender:</label><br>
+      <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        </select><br>
+      <label for="vegetarian">Vegetarian:</label><br>
+      <select id="vegetarian">
+        <option value="not vegetarian">No</option>
+        <option value="vegetarian">Yes</option>
+      </select><br>
+      <label for="fitness">Fitness Level:</label><br>
+      <select id="fitness">
+        <option value="sedentary">Sedentary</option>
+        <option value="moderate">Moderate</option>
+        <option value="active">Active</option>
+      </select><br>
       <label for="trying">Select Your Goal:</label><br>
       <select id="trying">
       	<option value="Lose Weight"> Lose Weight </option>
@@ -59,10 +79,15 @@
      
      
         // Get inputs from form
-const openai_key = document.getElementById('openai_key').value;
-const weight = document.getElementById('weight').value;
-const height = document.getElementById('height').value;
-const trying = document.getElementById('trying').value;
+        const openai_key = document.getElementById('openai_key').value;
+        const weight = document.getElementById('weight').value;
+        const height = document.getElementById('height').value;
+        const age = document.getElementById('age').value;
+        const gender = document.getElementById('gender').value;
+        const vegetarian = document.getElementById('vegetarian').value;
+        const allergies = document.getElementById('allergies').value;
+        const fitness = document.getElementById('fitness').value;
+        const trying = document.getElementById('trying').value;
        
         // Create request to OpenAI GPT-3 API
         const request = new XMLHttpRequest();
@@ -81,7 +106,7 @@ const trying = document.getElementById('trying').value;
         request.send(
           JSON.stringify({
             model: 'text-davinci-003',
-            prompt: `"Please create a full day diet plan for a person with a weight of ${weight} pounds and a height of ${height} meters who is trying to ${trying}. The diet plan should include breakfast, lunch, dinner and maybe two snacks, and each meal should include a variety of nutrients. Please also include the total calorie count at the end of the plan. A Normal amount of calories to eat in a day is 200, trying to gain is 2300 and losing is 1600.
+            prompt: `Please create a full day diet plan for a ${age} year old ${gender} with a weight of ${weight} pounds, a height of ${height} meters, and a fitness level of ${fitness}. The person is ${vegetarian} and has the following food allergies: ${allergies}. The person is trying to ${trying}. The diet plan should include breakfast, lunch, dinner and maybe two snacks, and each meal should include a variety of nutrients. Please also include the total calorie count at the end of the plan. A normal amount of calories to eat in a day is around 2000, trying to gain weight is around 2500, and trying to lose weight is around 1500. At the bottom of the plan, please provide a brief explanation (one sentence) for why you chose the specific foods included in the plan.
 `,
             max_tokens: 1024,
           })
@@ -89,16 +114,14 @@ const trying = document.getElementById('trying').value;
       }
      
      
-//Function to copy text from output
-function copyText() {
-  const outputText = document.getElementById('output').innerHTML;
-  navigator.clipboard.writeText(outputText);
-}
- </script>
- 
- <button onclick="copyText()">
+      // Function to copy text from output
+      function copyText() {
+        const outputText = document.getElementById('output').innerHTML;
+        navigator.clipboard.writeText(outputText);
+      }
+    </script>
+    <button onclick="copyText()">
    Copy (Paste To See Format)
  </button>
   </body>
 </html>
-
